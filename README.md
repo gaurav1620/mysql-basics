@@ -297,7 +297,7 @@ REFERENCES branch(branch_id)
 ON DELETE SET NULL;
 ```
 
-Add a super_id (supervisor id) to the employee table. Also observe that a supervisor is himself a employee. This can be done because, a table can have a foreign which references its own primary key.
+Add a super_id (supervisor id) to the employee table. Also observe that a supervisor is himself a employee. This can be done because, a table can have a foreign key which references its own primary key.
 ```
 ALTER TABLE employee
 ADD FOREIGN KEY(super_id)
@@ -338,7 +338,7 @@ CREATE TABLE branch_supplier (
 );
 ```
 
-Add the data.
+Add the data. Observe the order in which the data is inserted. For exampleobserver that branch_id is a foreign key for employee table whereas mgr_id is the foreign key for branch table which references the employee table. So this is a circular relationship, in order to insert data in these type of tables, first we insert null in some columns and then update after the reference table is created for the foreign key.
 ```
 
 -- Corporate
@@ -407,10 +407,131 @@ INSERT INTO works_with VALUES(107, 405, 26000);
 INSERT INTO works_with VALUES(102, 406, 15000);
 INSERT INTO works_with VALUES(105, 406, 130000);
 ```
+Let's start with some basic queries.
+
+Find out the distinct branches that employees belong to.
 ```
+mysql> SELECT DISTINCT branch_id FROM employee;
++-----------+
+| branch_id |
++-----------+
+|         1 |
+|         2 |
+|         3 |
++-----------+
 ```
+##### Use of Functions
+
+Use the COUNT function to find the total number of females in the employee table.
 ```
+mysql> SELECT COUNT(*) from employee WHERE sex='F';
++----------+
+| COUNT(*) |
++----------+
+|        3 |
++----------+
 ```
+Count how many of the employees have a super_id
+```
+mysql> SELECT COUNT(super_id) FROM employee;
++-----------------+
+| COUNT(super_id) |
++-----------------+
+|               8 |
++-----------------+
+```
+
+Find the number of males born after 1970 
+```
+mysql> SELECT COUNT(*) FROM employee WHERE sex='M' AND birth_day >= '1971-01-01';
++----------+
+| COUNT(*) |
++----------+
+|        2 |
++----------+
+```
+
+Find average salary of employees
+```
+mysql> SELECT AVG(salary ) FROM employee;
++--------------+
+| AVG(salary ) |
++--------------+
+|   92888.8889 |
++--------------+
+```
+Find sum of salary of employees
+```
+mysql> SELECT SUM(salary) from employee;
++-------------+
+| SUM(salary) |
++-------------+
+|      836000 |
++-------------+
+```
+
+Find out total count of genders using GROUP BY
+```
+mysql> SELECT COUNT(sex), sex FROM employee GROUP BY sex;
++------------+------+
+| COUNT(sex) | sex  |
++------------+------+
+|          3 | F    |
+|          6 | M    |
++------------+------+
+```
+
+Find out the total salary paid to different genders
+```
+mysql> SELECT SUM(salary),sex FROM employee GROUP BY sex;
++-------------+------+
+| SUM(salary) | sex  |
++-------------+------+
+|      228000 | F    |
+|      608000 | M    |
++-------------+------+
+```
+
+Find total sales of each salseman
+```
+mysql> SELECT SUM(total_sales), emp_id FROM works_with GROUP BY emp_id;
++------------------+--------+
+| SUM(total_sales) | emp_id |
++------------------+--------+
+|           282000 |    102 |
+|           218000 |    105 |
+|            31000 |    107 |
+|            34500 |    108 |
++------------------+--------+
+```
+
+##### Wildcards
+Wildcards are used with the LIKE keyword to find matching strings (similar to regex).
+% -> The '%' wildcard is used to specify any number of characters.
+_ -> The '_' wildcard is used to specify a single occurence of a letter.
+
+Find a company whose name ends in 'LLC'
+```
+mysql> SELECT * FROM client WHERE client_name LIKE '%LLC';
++-----------+--------------------+-----------+
+| client_id | client_name        | branch_id |
++-----------+--------------------+-----------+
+|       403 | John Daly Law, LLC |         3 |
++-----------+--------------------+-----------+
+```
+
+Find all employees born in February
+```
+mysql> SELECT * from employee WHERE birth_day LIKE '____-02-__';
++--------+------------+-----------+------------+------+--------+----------+-----------+
+| emp_id | first_name | last_name | birth_day  | sex  | salary | super_id | branch_id |
++--------+------------+-----------+------------+------+--------+----------+-----------+
+|    104 | Kelly      | Kapoor    | 1980-02-05 | F    |  55000 |      102 |         2 |
+|    105 | Stanley    | Hudson    | 1958-02-19 | M    |  69000 |      102 |         2 |
++--------+------------+-----------+------------+------+--------+----------+-----------+
+
+```
+
 ```
 ```
 ```
