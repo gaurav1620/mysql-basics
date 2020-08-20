@@ -261,7 +261,7 @@ Foreign Key - A foreign key  a field (or collection of fields) in one table that
 
 
 ##### Lets now create a more complex Database.
-<a id="raw-url" style="color:dodgerblue" href="https://github.com/gaurav1620/mysql-basics/blob/master/company-database.pdf">Click here</a> to view the database that we are going to create.
+<a id="raw-url" style="color:dodgerblue" href="https://github.com/gaurav1620/mysql-basics/blob/master/company-database.pdf" target="_blank">Click here</a> to view the database that we are going to create.
 
 In companies, a dabase mostly consists of more than one table. We will create a complex model of The Office, with multiple tables for Employees, Branch, Client, Branch_Supplier etc. These tables contain foreign keys to other tables.
 
