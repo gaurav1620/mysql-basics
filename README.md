@@ -4,7 +4,7 @@ Creating a Database
 CREATE DATABASE mydb;
 ```
 
-Basic data types in SQL: 
+Basic data types in SQL:
 
   - INT -> Whole Number
   - DECIMAL (M,N) -> M is the total number of digits, N is the number of digits after the decimal point
@@ -42,7 +42,7 @@ Describe a table
 DESCRIBE student;
 ```
 
-Deleting a table 
+Deleting a table
 ```
 DROP TABLE student;
 ```
@@ -69,13 +69,13 @@ INSERT INTO student VALUES(1, 'Joe', 'Mathematics', 88.96);
 
 Another method to insert data in table
 ```
-INSERT INTO student(name, student_id, percent, major) 
+INSERT INTO student(name, student_id, percent, major)
     VALUES('Mary', 2, 90.19, 'Psycology');
 ```
 
 If we don't add data in some column then it is set to NULL
 ```
-INSERT INTO student(name, student_id, percent) 
+INSERT INTO student(name, student_id, percent)
     VALUES('Harry', 3, 79.99);
 ```
 
@@ -204,7 +204,7 @@ mysql> SELECT name,major,percent from student where percent > 80 and major='Math
 
 Updating databse.
 ```
-UPDATE student 
+UPDATE student
   SET major='Maths'
   WHERE major='Mathematics';
 ```
@@ -253,14 +253,16 @@ mysql> SELECT * from student where major IN ('Maths','Psycology') AND percent > 
 
 Lets understand some concepts.
 
-Primary Key - A primary key for a table is a column that has unique values and thus can be used to uniquely identify any row. You can imagine the data stored in tables by using a hashed values for the primary key, thus providing O(1) time for searching given primary keys. 
+Primary Key - A primary key for a table is a column that has unique values and thus can be used to uniquely identify any row. You can imagine the data stored in tables by using a hashed values for the primary key, thus providing O(1) time for searching given primary keys.
 
 Composite key - A table can have more than one primary key, and if this is the case then it may be allowed for a column to have duplicate values but the combinations of these (keys ) would certainly have to be different for each row.
 
 Foreign Key - A foreign key  a field (or collection of fields) in one table that refers to the primary key in another table.
 
 
-##### Lets now create a more complex Database. 
+##### Lets now create a more complex Database.
+<a id="raw-url" style="color:dodgerblue" href="https://github.com/gaurav1620/mysql-basics/blob/master/company-database.pdf">Click here</a> to view the database that we are going to create.
+
 In companies, a dabase mostly consists of more than one table. We will create a complex model of The Office, with multiple tables for Employees, Branch, Client, Branch_Supplier etc. These tables contain foreign keys to other tables.
 
 ##### Schemas :
@@ -441,7 +443,7 @@ mysql> SELECT COUNT(super_id) FROM employee;
 +-----------------+
 ```
 
-Find the number of males born after 1970 
+Find the number of males born after 1970
 ```
 mysql> SELECT COUNT(*) FROM employee WHERE sex='M' AND birth_day >= '1971-01-01';
 +----------+
@@ -636,4 +638,3 @@ mysql> SELECT first_name
 | Josh       |
 +------------+
 ```
-
