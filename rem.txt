@@ -47,4 +47,11 @@ CREATE TABLE branch_supplier (
     FOREIGN KEY(branch_id) REFERENCES branch(branch_id) ON DELETE CASCADE
 );
 
-
+SELECT first_name,salary
+FROM employee
+WHERE emp_id IN (
+    SELECT emp_id
+    FROM works_with
+    GROUP BY emp_id
+    WHERE SUM(total_sales) < 100000
+);

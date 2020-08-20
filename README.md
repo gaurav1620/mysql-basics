@@ -531,13 +531,109 @@ mysql> SELECT * from employee WHERE birth_day LIKE '____-02-__';
 +--------+------------+-----------+------------+------+--------+----------+-----------+
 
 ```
+#### JOINS
 
+Before proceeding let's add a new branch without any manager, and a employee without any branch.
 ```
+mysql> INSERT INTO branch VALUES(4, 'Buffalo', NULL, NULL);
+mysql> INSERT INTO employee VALUES(109, 'Bruno', 'Mars','1980-09-09', 'M', 50000, NULL, NULL);
 ```
+
+Inner Join - A simple join that takes all rows that satisfy the condition. Below are some examples.
 ```
+mysql> SELECT employee.emp_id, employee.first_name, branch.branch_name
+    -> FROM employee
+    -> JOIN branch
+    -> ON employee.emp_id = branch.mgr_id;                                               
++--------+------------+-------------+
+| emp_id | first_name | branch_name |
++--------+------------+-------------+
+|    100 | David      | Corporate   |
+|    102 | Michael    | Scranton    |
+|    106 | Josh       | Stamford    |
++--------+------------+-------------+
+
+mysql> SELECT employee.emp_id, employee.first_name, branch.branch_name
+    -> FROM employee
+    -> JOIN branch
+    -> ON employee.branch_id = branch.branch_id;
++--------+------------+-------------+
+| emp_id | first_name | branch_name |
++--------+------------+-------------+
+|    100 | David      | Corporate   |
+|    101 | Jan        | Corporate   |
+|    102 | Michael    | Scranton    |
+|    103 | Angela     | Scranton    |
+|    104 | Kelly      | Scranton    |
+|    105 | Stanley    | Scranton    |
+|    106 | Josh       | Stamford    |
+|    107 | Andy       | Stamford    |
+|    108 | Jim        | Stamford    |
++--------+------------+-------------+
 ```
+
+Left Join - It is used when you want to take all the rows from the left table (left table is the one you use after the 'FROM' keyword) even if they dont match any value in the right table.
 ```
+mysql> SELECT employee.emp_id, employee.first_name, branch.branch_name                       
+    -> FROM employee
+    -> LEFT JOIN branch
+    -> ON employee.branch_id = branch.branch_id;
++--------+------------+-------------+
+| emp_id | first_name | branch_name |
++--------+------------+-------------+
+|    100 | David      | Corporate   |
+|    101 | Jan        | Corporate   |
+|    102 | Michael    | Scranton    |
+|    103 | Angela     | Scranton    |
+|    104 | Kelly      | Scranton    |
+|    105 | Stanley    | Scranton    |
+|    106 | Josh       | Stamford    |
+|    107 | Andy       | Stamford    |
+|    108 | Jim        | Stamford    |
+|    109 | Bruno      | NULL        |
++--------+------------+-------------+
 ```
+
+Right Join - It is used when you want to take all the rows from the right table even if they dont match any value in the left table.
 ```
+mysql> SELECT employee.emp_id, employee.first_name, branch.branch_name                       
+    -> FROM employee
+    -> RIGHT JOIN branch
+    -> ON employee.branch_id = branch.branch_id;                                         
++--------+------------+-------------+
+| emp_id | first_name | branch_name |
++--------+------------+-------------+
+|    100 | David      | Corporate   |
+|    101 | Jan        | Corporate   |
+|    102 | Michael    | Scranton    |
+|    103 | Angela     | Scranton    |
+|    104 | Kelly      | Scranton    |
+|    105 | Stanley    | Scranton    |
+|    106 | Josh       | Stamford    |
+|    107 | Andy       | Stamford    |
+|    108 | Jim        | Stamford    |
+|   NULL | NULL       | Buffalo     |
++--------+------------+-------------+
 ```
+
+Full outer join - The combination of left and right join is called as full outer join. This functionality is not provided in MySQL.
+
+
+##### Nested Queries
+
+Find the First name of all the managers of all the branches
 ```
+mysql> SELECT first_name
+    -> FROM employee
+    -> WHERE emp_id IN (
+    ->     SELECT mgr_id FROM branch
+    -> );
++------------+
+| first_name |
++------------+
+| David      |
+| Michael    |
+| Josh       |
++------------+
+```
+
